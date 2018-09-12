@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2016 SteelBridge Laboratories, LLC.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  For more information: http://steelbridgelabs.com
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.steelbridgelabs.oss</groupId>
+    <artifactId>parent-oss</artifactId>
+    <version>0.1.0</version>
+    <packaging>pom</packaging>
+    <name>SteelBridge Labs Open Source Software - Parent</name>
+    <description>SteelBridge Labs Open Source Software - Parent</description>
+    <url>https://github.com/SteelBridgeLabs/parent-oss</url>
+    <inceptionYear>2016</inceptionYear>
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.opensource.org/licenses/Apache-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <organization>
+        <name>SteelBridge Labs</name>
+        <url>http://steelbridgelabs.com/</url>
+    </organization>
+    <developers>
+        <developer>
+            <name>Rogelio J. Baucells</name>
+            <email>rogelio@steelbridgelabs.com</email>
+        </developer>
+    </developers>
+    <contributors>
+    </contributors>
+    <scm>
+        <connection>scm:git:git@github.com:SteelBridgeLabs/parent-oss.git</connection>
+        <developerConnection>scm:git:git@github.com:SteelBridgeLabs/parent-oss.git</developerConnection>
+        <url>https://github.com/SteelBridgeLabs/parent-oss.git</url>
+    </scm>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+    <properties>
+        <!-- java compiler -->
+        <java.version>1.8</java.version>
+        <!-- make sure build is platform independent -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- maven plugins -->
+        <maven-compiler-plugin.version>3.5</maven-compiler-plugin.version>
+        <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
+        <maven-jar-plugin.version>3.0.1</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>2.19.1</maven-failsafe-plugin.version>
+        <!-- build helper -->
+        <build-helper-maven-plugin.version>1.10</build-helper-maven-plugin.version>
+        <!-- checkstyle -->
+        <checkstyle.version>6.15</checkstyle.version>
+        <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
+        <!-- findbugs -->
+        <findbugs.plugin.version>3.0.2</findbugs.plugin.version>
+        <!-- build number -->
+        <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
+        <!-- apache rat plugin -->
+        <apache-rat-plugin.version>0.12</apache-rat-plugin.version>
+        <doxia-core.version>1.7</doxia-core.version>
+        <!-- nexus staging -->
+        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+        <!-- sign -->
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <!-- coverall -->
+        <coveralls-maven-plugin.version>4.2.0</coveralls-maven-plugin.version>
+        <!-- jacoco -->
+        <jacoco-maven-plugin.version>0.7.7.201606060606</jacoco-maven-plugin.version>
+    </properties>
+    <profiles>
+        <profile>
+            <id>sign</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>build-extras</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    <build>
+        <plugins>
+            <!-- build number -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>${buildnumber-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- nexus staging -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging-maven-plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <!-- compiler -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <!-- maven source -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- maven jar -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                    <configuration>
+                        <archive>
+                            <index>true</index>
+                            <manifestEntries>
+                                <Implementation-Title>${project.groupId}.${project.artifactId}</Implementation-Title>
+                                <Specification-Title>${project.name}</Specification-Title>
+                                <Specification-Version>${project.version}</Specification-Version>
+                                <Project-url>${project.url}</Project-url>
+                                <Build-Java>${java.version}</Build-Java>
+                                <Build-Time>${maven.build.timestamp}</Build-Time>
+                                <Build-OS>${os.name}</Build-OS>
+                                <Build-Label>${project.version}</Build-Label>
+                                <hash>${buildNumber}</hash>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <!-- findbugs plugin -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${findbugs.plugin.version}</version>
+                    <configuration>
+                        <!-- try to find all bugs -->
+                        <effort>Max</effort>
+                        <!-- report all bugs -->
+                        <threshold>Low</threshold>
+                        <!-- produce xml report -->
+                        <xmlOutput>true</xmlOutput>
+                        <!-- directory in which the XML report is created -->
+                        <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>analyze-compile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- checkstyle plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle.plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${checkstyle.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <configuration>
+                                <configLocation>checkstyle.xml</configLocation>
+                                <encoding>UTF-8</encoding>
+                                <consoleOutput>true</consoleOutput>
+                                <failsOnError>true</failsOnError>
+                                <violationSeverity>warning</violationSeverity>
+                            </configuration>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${maven-gpg-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- javadoc plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- build helper -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper-maven-plugin.version}</version>
+                </plugin>
+                <!-- unit tests -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.surefire</groupId>
+                            <artifactId>surefire-junit47</artifactId>
+                            <version>${maven-surefire-plugin.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <!-- failsafe plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.surefire</groupId>
+                            <artifactId>surefire-junit47</artifactId>
+                            <version>${maven-surefire-plugin.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                            <configuration>
+                                <includes>
+                                    <include>**/*.class</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- coverall -->
+                <plugin>
+                    <groupId>org.eluder.coveralls</groupId>
+                    <artifactId>coveralls-maven-plugin</artifactId>
+                    <version>${coveralls-maven-plugin.version}</version>
+                    <configuration>
+                        <timestampFormat>EpochMillis</timestampFormat>
+                    </configuration>
+                </plugin>
+                <!-- test coverage -->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <reporting>
+        <plugins>
+            <!-- findbugs plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.plugin.version}</version>
+                <configuration>
+                    <!-- try to find all bugs -->
+                    <effort>Max</effort>
+                    <!-- report all bugs -->
+                    <threshold>Low</threshold>
+                    <!-- produce xml report -->
+                    <xmlOutput>true</xmlOutput>
+                    <!-- directory in which the XML report is created -->
+                    <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>
